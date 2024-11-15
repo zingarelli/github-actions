@@ -8,9 +8,10 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3
-      # First install this project
+      - uses: actions/checkout@v3
+      # First install this project...
       - name: Run Installation
         run: npm install
+      # ... then run Linter
       - name: Apply Linter
         run: npm run lint
