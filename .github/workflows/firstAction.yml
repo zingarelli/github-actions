@@ -4,6 +4,8 @@ name: 'CI: our first action'
 on:
   push:
     branches: ['main']
+  pull_request:
+    branches: ['test'] # it will only be triggered when the PR comes from this branch
    
 # what needs to be executed when the workflow is triggered
 jobs:
