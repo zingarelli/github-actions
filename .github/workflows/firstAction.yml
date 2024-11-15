@@ -1,0 +1,15 @@
+name: 'CI: our first action'
+
+# when the workflow should be triggered
+on:
+  push:
+    branches: ['main']
+   
+# what needs to be executed when the workflow is triggered
+jobs:
+  example: # name for this job, it can be any name
+    runs-on: ubuntu-latest
+    steps: # add - to indicate it is a list of steps to follow
+      - uses: actions/checkout@v3
+      - name: one line script that will run on a shell
+        run: echo Hello, world

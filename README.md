@@ -1,3 +1,7 @@
+# CI/CD e GitHub Actions
+
+Curso: [NextJS: CI e CD para Front-end com o Github Actions](https://cursos.alura.com.br/course/nextjs-ci-cd-front-end-github-actions)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
