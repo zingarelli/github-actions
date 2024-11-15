@@ -5,7 +5,8 @@ on:
   push:
     branches: ['main']
   pull_request:
-    branches: ['test'] # it will only be triggered when the PR targets this branch
+    # branches: ['test'] # it will only be triggered when the PR targets this branch
+    types: [opened, synchronize] # triggers whenever a PR is created or receives new commits
    
 # what needs to be executed when the workflow is triggered
 jobs:
@@ -15,3 +16,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: one line script that will run on a shell
         run: echo Hello, world
+      - name: list files in this project
+        run: ls -la
