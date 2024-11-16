@@ -4,41 +4,55 @@
 
 🗒️ [Events that trigger workflows](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows)
 
----
+## Usando GitHub Actions para deploy na Vercel
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Para o CD usando a Vercel, são necessários alguns passos. O curso mostrou detalhadamente uma forma, mas já é antiga e algumas coisas mudaram. Deixo os links abaixo para referência (em inglês) de como é feito hoje em dia, e mais abaixo os scrips criados no `package.json` e o arquivo yml utilizado para o workflow:
 
-## Getting Started
+- [Criação do arquivo yml para o workflow](https://vercel.com/guides/how-can-i-use-github-actions-with-vercel)
 
-First, run the development server:
+- [Criação do VERCEL_TOKEN](https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Instalação da Vercel CLI](https://vercel.com/docs/cli): necessária para criar os tokens VERCEL_ORG_ID e VERCEL_PROJECT_ID.
+
+  - uma alternativa é usar o comando `npx vercel link` na pasta do projeto. Quando rodar a primeira vez, dois passos adicionais irão ocorrer: 1. Irá instalar o pacote da Vercel e 2. Irá logar na sua conta Vercel. Após isso, o comando irá rodar e fazer algumas perguntas para configuração do link (é como seu projeto local é linkado com o projeto hospedado na Vercel). Finalizado, será criada a pasta `.vercel` e dentro dela você encontrará o `projectId` e `orgId` no arquivo `project.json`. Essa pasta é automaticamente adicionada ao gitignore. **NÃO compartilhe essa pasta nem os valores dos tokens** para evitar acesso indevido ao seu projeto.
+
+- [Criação de secrets no GitHub](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository): é aqui que você vai guardar os tokens gerados.
+
+### Scripts package.json
+
+```json
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "lint:fix": "next lint --fix",
+  "deploy:prod": "npm run build && vercel --yes --prod --token=$VERCEL_TOKEN"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Arquivo yml
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```yml
+name: 'CD: Main Workflow'
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+env:
+  VERCEL_TOKEN: '${{ secrets.VERCEL_TOKEN }}'
+  VERCEL_ORG_ID: '${{ secrets.VERCEL_ORG_ID }}'
+  VERCEL_PROJECT_ID: '${{ secrets.VERCEL_PROJECT_ID }}'
 
-## Learn More
+on:
+  push:
+    branches: [main, cd-vercel]
 
-To learn more about Next.js, take a look at the following resources:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Install
+        run: npm install
+      - name: Run Deploy
+        run: npm run deploy:prod
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
