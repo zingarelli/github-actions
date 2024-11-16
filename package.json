@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf build && next build && mv ./out ./build",
+    "build": "next build",
+    "build:vercel": "vercel build --token=$VERCEL_TOKEN",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "deploy:prod": "npm run build && vercel --cwd ./build --yes --prod --token=$VERCEL_TOKEN"
+    "deploy:prod": "npm run build:vercel && vercel deploy --prebuilt --yes --prod --token=$VERCEL_TOKEN"
   },
   "dependencies": {
     "next": "15.0.3",
