@@ -1,12 +1,26 @@
+![SVG depicting the steps involving a CI/CD process in an infinite cycle: plan, code, build, continuous testing, release, deploy, operate, monitor. ](./public/cicd.svg)
+
 # CI/CD e GitHub Actions
 
 🎓 Curso: [NextJS: CI e CD para Front-end com o Github Actions](https://cursos.alura.com.br/course/nextjs-ci-cd-front-end-github-actions)
 
 🗒️ [Events that trigger workflows](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows)
 
+🙏 [Créditos da imagem](https://www.blackduck.com/glossary/what-is-cicd.html)
+
+## Definição
+
+- CI (Continuous Integration): está relacionado às etapas de commit, build e testes da aplicação, ou seja, tarefas do dia a dia do dev;
+
+- CD (Continuous Delivery): está relacionado às etapas de release e deploy, ou seja, às entregas do projeto.
+
+São processos de automatização de um projeto.
+
 ## Usando GitHub Actions para deploy na Vercel
 
-Para o CD usando a Vercel, são necessários alguns passos. O curso mostrou detalhadamente uma forma, mas já é antiga e algumas coisas mudaram. Deixo os links abaixo para referência (em inglês) de como é feito hoje em dia, e mais abaixo os scrips criados no `package.json` e o arquivo yml utilizado para o workflow:
+Para o CD usando a Vercel, são necessários alguns passos. O curso mostrou detalhadamente uma forma, mas já é antiga e algumas coisas mudaram. 
+
+Deixo abaixo os links para referência (em inglês) de como é feito hoje em dia, e mais abaixo os scrips criados no `package.json` e o arquivo yml utilizado para o workflow:
 
 - [Criação do arquivo yml para o workflow](https://vercel.com/guides/how-can-i-use-github-actions-with-vercel)
 
@@ -36,23 +50,27 @@ Para o CD usando a Vercel, são necessários alguns passos. O curso mostrou deta
 ```yml
 name: 'CD: Main Workflow'
 
+# variáveis de ambiente 
+# (salvas no GitHub secrets)
 env:
   VERCEL_TOKEN: '${{ secrets.VERCEL_TOKEN }}'
   VERCEL_ORG_ID: '${{ secrets.VERCEL_ORG_ID }}'
   VERCEL_PROJECT_ID: '${{ secrets.VERCEL_PROJECT_ID }}'
 
+# quando a action deve ser acionada
 on:
   push:
     branches: [main, cd-vercel]
 
+# o que deve ser executado
 jobs:
-  deploy:
+  deploy: # nome deste job
     runs-on: ubuntu-latest
-    steps:
+    # use - para indicar uma lista de passos
+    steps:      
       - uses: actions/checkout@v3
       - name: Run Install
         run: npm install
       - name: Run Deploy
         run: npm run deploy:prod
 ```
-
