@@ -31,3 +31,20 @@ jobs:
         run: npm install
       - name: Run Preview Deployment
         run: npm run deploy:preview
+  e2etest:
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/checkout@v3
+
+      # caching npm for faster install
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.0
+          cache: 'npm'
+
+      # Setting up Cypress with own GitHub actions 
+      # config for an optimized remote run
+      - name: Run Cypress e2e Test
+        uses: cypress-io/github-action@v4
+        with:
+          browser: chrome
