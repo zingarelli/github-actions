@@ -6,6 +6,7 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>THIS TEXT SHOULD ONLY BE DISPLAYED IN THE PREVIEW!</h1>
+  <p>breaking the code!
         <Image
           className={styles.logo}
           src="/next.svg"
