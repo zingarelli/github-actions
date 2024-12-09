@@ -1,0 +1,17 @@
+name: 'CI: Main Workflow'
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # First install this project...
+      - name: Run Installation
+        run: npm install
+      # ... then run Linter
+      - name: Apply Linter
+        run: npm run lint
